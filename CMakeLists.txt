@@ -9,5 +9,5 @@ add_executable(ctask
         Task.h)
 
 set_target_properties(ctask PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "{CMAKE_SOURCE_DIR}/bin"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
 )
