@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -14,6 +15,7 @@ void save_tasks_to_file(const std::vector<Task>& tasks);
 void print_invalid_usage_of_option(const std::string& option);
 unsigned short extract_id(int argc, const char* id_to_convert, const std::string& option);
 void purge_tasks(std::vector<Task>& tasks);
+void print_help_message();
 
 int main(const int argc, char* argv[]) {
     if (argc < 2)
@@ -29,6 +31,10 @@ int main(const int argc, char* argv[]) {
         std::cerr << "Usage: " << argv[0] << " 'option' <variable>" << std::endl;
         std::cerr << "Try ctask --help" << std::endl;
         return EXIT_FAILURE;
+    }
+    if (option == "--help"){
+      print_help_message();
+      return EXIT_SUCCESS;
     }
     std::vector<Task> tasks;
     loadTasksFromFile(tasks);
@@ -67,44 +73,6 @@ int main(const int argc, char* argv[]) {
     {
         const unsigned short id = extract_id(argc, argv[2], option);
         remove_task(tasks, id);
-    }
-    else if (option == "--help")
-    {
-        std::string help_message = R"(
-ctask - Simple Command-Line Task Manager
-----------------------------------------
-Usage:
-  ctask [command] [arguments]
-
-Commands:
-  ls
-      List all tasks with their IDs and status.
-
-  add <task_name>
-      Add a new task with the given name.
-      Example: ctask add "Buy groceries"
-
-  rm <task_id>
-      Remove the task with the specified ID.
-      Example: ctask rm 3
-
-  check <task_id>
-      Mark the task with the given ID as completed. | Mark all tasks as completed.
-      Example: ctask check 2 | ctask check all
-
-  uncheck <task_id>
-      Mark the task with the given ID as not completed. | Mark all tasks as not completed.
-      Example: ctask uncheck 2 | ctask uncheck all
-
-  --help
-      Display this help message.
-
-Notes:
-  - All tasks are stored in a JSON file located in:
-      .tasks.json
-  - Task IDs are assigned automatically.
-        )";
-        std::cout << help_message << std::endl;
     }
     else if (option == "purge")
     {
@@ -277,4 +245,42 @@ void purge_tasks(std::vector<Task>& tasks)
 {
     tasks.clear();
     std::cout << "Tasks purged" << std::endl;
+}
+
+void print_help_message(){
+        std::string help_message = R"(
+ctask - Simple Command-Line Task Manager
+----------------------------------------
+Usage:
+  ctask [command] [arguments]
+
+Commands:
+  ls
+      List all tasks with their IDs and status.
+
+  add <task_name>
+      Add a new task with the given name.
+      Example: ctask add "Buy groceries"
+
+  rm <task_id>
+      Remove the task with the specified ID.
+      Example: ctask rm 3
+
+  check <task_id>
+      Mark the task with the given ID as completed. | Mark all tasks as completed.
+      Example: ctask check 2 | ctask check all
+
+  uncheck <task_id>
+      Mark the task with the given ID as not completed. | Mark all tasks as not completed.
+      Example: ctask uncheck 2 | ctask uncheck all
+
+  --help
+      Display this help message.
+
+Notes:
+  - All tasks are stored in a JSON file located in:
+      .tasks.json
+  - Task IDs are assigned automatically.
+        )";
+        std::cout << help_message << std::endl;
 }
